@@ -55,9 +55,9 @@ public class ProductDAOImpl implements ProductDAO {
 	@Transactional
 	public List<Product> list() {
 		@SuppressWarnings("unchecked")
-		List<Product> listProduct = (List<Product>) sessionFactory.getCurrentSession().createCriteria(Product.class)
+		List<Product> productList = (List<Product>) sessionFactory.getCurrentSession().createCriteria(Product.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-		return listProduct;
+		return productList;
 	}
 
 	

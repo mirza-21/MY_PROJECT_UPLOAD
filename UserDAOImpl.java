@@ -64,40 +64,36 @@ public class UserDAOImpl implements UserDAO {
 	@SuppressWarnings("unchecked")
 	public List<User> list() {
 		@SuppressWarnings("unchecked")
-		List<User> listUser = (List<User>) 
-		          sessionFactory.getCurrentSession()
-				.createCriteria(User.class)
+		List<User> listUser = (List<User>) sessionFactory.getCurrentSession().createCriteria(User.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 		return listUser;
 	}
-	
+
 	@Transactional
 	public boolean isValidUser(String id, String password) {
-		String hql = "from User where id= '" + id + "' and " + " password ='" + password+"'";
+		String hql = "from User where id= '" + id + "' and " + " password ='" + password + "'";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
-		
+
 		@SuppressWarnings("unchecked")
 		List<User> list = (List<User>) query.list();
-		
+
 		if (list != null && !list.isEmpty()) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	@Transactional
-	public String getUsername(String id)
-	{
-		Session s= sessionFactory.openSession();
+	public String getUsername(String id) {
+		Session s = sessionFactory.openSession();
 		Query q = s.createQuery("from User where id= :id");
 		q.setParameter("id", id);
 		List<User> l = q.list();
-		String name=null;
-		for (User u:l)
-		{
-			name= u.getName();
-			
+		String name = null;
+		for (User u : l) {
+			name = u.getName();
+
 		}
 		return name;
 	}
