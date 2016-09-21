@@ -1,8 +1,7 @@
 package com.niit.Controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.niit.shoppingcart.dao.CategoryDAO;
 import com.niit.shoppingcart.model.Category;
 
+@Controller
 public class CategoryController {
-	
-	private static Logger log = LoggerFactory.getLogger(CategoryController.class);
 
 	@Autowired
 	private CategoryDAO categoryDAO;
@@ -23,29 +21,31 @@ public class CategoryController {
 	@Autowired
 	private Category category;
 
-	@RequestMapping(value = "/categories", method = RequestMethod.GET)
+	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public String listCategories(Model model) {
-		log.debug("Starting Of the method listCategories");
+
 		model.addAttribute("category", category);
 		model.addAttribute("categoryList", this.categoryDAO.list());
-		log.debug("Ending Of the method listCategories");
-		return "categories";
+		for(Category c:categoryDAO.list())
+		{
+			System.out.println(c.getId());
+			
+		}
+
+		return "category";
 	}
 
-	// For Add and Update Category 
+	// For Add and Update Category
 	@RequestMapping(value = "/category/add", method = RequestMethod.POST)
 	public String addCategory(@ModelAttribute("category") Category category) {
 
-		
-
 		categoryDAO.saveOrUpdate(category);
 
-		return "categories";
-		
+		return "redirect:/category";
 
 	}
 
-	// For Remove Category
+	// For Delete Category
 	@RequestMapping("category/remove/{id}")
 	public String deleteCategory(@PathVariable("id") String id, ModelMap model) throws Exception {
 
@@ -56,8 +56,8 @@ public class CategoryController {
 			model.addAttribute("message", e.getMessage());
 			e.printStackTrace();
 		}
-		
-		return "categories";
+
+		return "redirect:/category";
 	}
 
 	// For Edit Category
@@ -66,9 +66,9 @@ public class CategoryController {
 		System.out.println(id);
 		System.out.println("editCategory");
 		model.addAttribute("category", this.categoryDAO.get(id));
-		model.addAttribute("listCategories", this.categoryDAO.list());
-		return "category";
-		
+		model.addAttribute("listCategory", this.categoryDAO.list());
+		return "redirect:/category";
+
 	}
 
 }
